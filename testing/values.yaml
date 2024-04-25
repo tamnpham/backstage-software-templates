@@ -1,8 +1,8 @@
 alice:
-  env: 
-  serviceName: ""
+  env: staging
+  serviceName: "alice-ltv-testing-2"
   image:
-    repository: "registry.trustingsocial.com/agi/"
+    repository: "registry.trustingsocial.com/agi/alice-ltv-testing-2"
     pullPolicy: IfNotPresent
     tag: "main.ec30070"
   imagePullSecrets:
@@ -11,10 +11,10 @@ alice:
     enabled: false
   vault:
     inject: true
-    roleName: -
+    roleName: staging-alice-ltv-testing-2
     envPath:
-      - "alice/data///config-env"
-      - "alice/data///secret-env"
+      - "alice/data/staging/alice-ltv-testing-2/config-env"
+      - "alice/data/staging/alice-ltv-testing-2/secret-env"
   containerPort: 8000
   podAnnotations:
     alpha.vault.security.banzaicloud.io/reload-on-secret-change: "true"
@@ -31,22 +31,22 @@ alice:
       memory: 256Mi
   ingress:
     enabled: true
-    name: --internal
+    name: alice-ltv-testing-2-staging-internal
     annotations:
       nginx.ingress.kubernetes.io/enable-cors: "true"
       nginx.ingress.kubernetes.io/cors-allow-methods: "*"
       nginx.ingress.kubernetes.io/cors-allow-headers: "x-user-time, content-type, x-session, authorization, x-recaptcha"
-      nginx.ingress.kubernetes.io/cors-allow-origin: "https://--internal.tsengineering.io"
+      nginx.ingress.kubernetes.io/cors-allow-origin: "https://alice-ltv-testing-2-staging-internal.tsengineering.io"
       nginx.ingress.kubernetes.io/cors-allow-credentials: "true"
     ingressClassName: internal-nginx
     hosts:
-      - --internal.tsengineering.io
+      - alice-ltv-testing-2-staging-internal.tsengineering.io
     path: /
     pathType: Prefix
     extraPaths: []
     tls:
       - hosts:
-          - --internal.tsengineering.io
+          - alice-ltv-testing-2-staging-internal.tsengineering.io
         secretName: star-tsengineering-io
   tolerations: []
   affinity: {}

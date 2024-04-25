@@ -1,0 +1,94 @@
+alice:
+  env: 
+  serviceName: ""
+  image:
+    repository: "registry.trustingsocial.com/agi/"
+    pullPolicy: IfNotPresent
+    tag: "main.ec30070"
+  imagePullSecrets:
+    - name: regcred
+  migration:
+    enabled: false
+  vault:
+    inject: true
+    roleName: -
+    envPath:
+      - "alice/data///config-env"
+      - "alice/data///secret-env"
+  containerPort: 8000
+  podAnnotations:
+    alpha.vault.security.banzaicloud.io/reload-on-secret-change: "true"
+  podSecurityContext: {}
+  securityContext: {}
+  statefulset:
+    enabled: false
+  service:
+    type: ClusterIP
+    port: 80
+  extraEnvs: []
+  resources:
+    limits:
+      memory: 256Mi
+  ingress:
+    enabled: true
+    name: --internal
+    annotations:
+      nginx.ingress.kubernetes.io/enable-cors: "true"
+      nginx.ingress.kubernetes.io/cors-allow-methods: "*"
+      nginx.ingress.kubernetes.io/cors-allow-headers: "x-user-time, content-type, x-session, authorization, x-recaptcha"
+      nginx.ingress.kubernetes.io/cors-allow-origin: "https://--internal.tsengineering.io"
+      nginx.ingress.kubernetes.io/cors-allow-credentials: "true"
+    ingressClassName: internal-nginx
+    hosts:
+      - --internal.tsengineering.io
+    path: /
+    pathType: Prefix
+    extraPaths: []
+    tls:
+      - hosts:
+          - --internal.tsengineering.io
+        secretName: star-tsengineering-io
+  tolerations: []
+  affinity: {}
+  revisionHistoryLimit: 10
+  updateStrategy:
+    rollingUpdate:
+      maxSurge: 50%
+      maxUnavailable: 0%
+    type: RollingUpdate
+  dnsPolicy: ClusterFirst
+  lifecycle: {}
+  startupProbe:
+    failureThreshold: 20
+    periodSeconds: 5
+    successThreshold: 1
+    timeoutSeconds: 1
+    tcpSocket:
+      port: 8000
+  livenessProbe:
+    failureThreshold: 3
+    httpGet:
+      path: /health
+      port: 8000
+      scheme: HTTP
+    periodSeconds: 60
+    successThreshold: 1
+    timeoutSeconds: 60
+  readinessProbe:
+    failureThreshold: 3
+    httpGet:
+      path: /health
+      port: 8000
+      scheme: HTTP
+    periodSeconds: 60
+    successThreshold: 1
+    timeoutSeconds: 60
+  terminationGracePeriodSeconds: 60
+  extraInitContainers: []
+  hostIPC: false
+  serviceAccount:
+    create: true
+    annotations: {}
+    name: ""
+  pdb:
+    enabled: false

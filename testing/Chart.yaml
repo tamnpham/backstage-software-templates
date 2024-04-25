@@ -1,0 +1,13 @@
+apiVersion: v2
+name: "alice-ltv-testing"
+
+type: application
+
+version: 0.0.5
+
+appVersion: "0.0.5"
+
+dependencies:
+  - name: alice
+    version: 0.0.5
+    repository: oci://registry.trustingsocial.com/agi/chart
